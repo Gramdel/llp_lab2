@@ -55,26 +55,25 @@ extern int yydebug;
     R_BRACE = 261,
     L_BRACKET = 262,
     R_BRACKET = 263,
-    DOT = 264,
-    COMMA = 265,
-    COLON = 266,
-    SELECT = 267,
-    INSERT = 268,
-    UPDATE = 269,
-    DELETE = 270,
-    VALUES = 271,
-    FILTER = 272,
-    JOIN = 273,
-    COMPARE_OP = 274,
-    LIKE_OP = 275,
-    LOGICAL_BOP = 276,
-    LOGICAL_UOP = 277,
-    BOOL = 278,
-    INT = 279,
-    DOUBLE = 280,
-    STRING = 281,
-    NAME = 282,
-    FOREIGN = 283
+    COMMA = 264,
+    COLON = 265,
+    SELECT = 266,
+    INSERT = 267,
+    UPDATE = 268,
+    DELETE = 269,
+    VALUES = 270,
+    FILTER = 271,
+    JOIN = 272,
+    COMPARE_OP = 273,
+    LIKE_OP = 274,
+    LOGICAL_BOP = 275,
+    LOGICAL_UOP = 276,
+    BOOL = 277,
+    INT = 278,
+    DOUBLE = 279,
+    STRING = 280,
+    NAME = 281,
+    FOREIGN = 282
   };
 #endif
 
@@ -91,7 +90,7 @@ union YYSTYPE
     astNode* node;
     nodeType opType;
 
-#line 95 "parser.tab.h"
+#line 94 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
