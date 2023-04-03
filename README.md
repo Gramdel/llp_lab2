@@ -1,5 +1,5 @@
 # Low-level programming lab2
-### Вариант 4: GraphQL
+### Вариант 4: GraphQL [(отчёт)](lab2.pdf)
 #### Сборка
 + Linux:
 ```
