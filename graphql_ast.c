@@ -5,7 +5,7 @@
 astNode* newNode() {
     astNode* node = malloc(sizeof(astNode));
     if (node) {
-        *node = (astNode) { 0 };
+        *node = (astNode) {0};
         return node;
     }
     return NULL;
@@ -56,15 +56,6 @@ astNode* newKeyNode(char* key) {
     return node;
 }
 
-astNode* newForeignKeyNode(astNode* keyNode) {
-    astNode* node = newNode();
-    if (node) {
-        node->type = FOREIGN_KEY_NODE;
-        node->left = keyNode;
-    }
-    return node;
-}
-
 astNode* newElementNode(astNode* keyNode, astNode* valNode) {
     astNode* node = newNode();
     if (node) {
@@ -103,21 +94,11 @@ astNode* newOperationNode(nodeType type, astNode* left, astNode* right) {
     return node;
 }
 
-astNode* newJoinNode(char* schemaName) {
-    astNode* node = newNode();
-    if (node) {
-        node->type = JOIN_NODE;
-        node->strVal = schemaName;
-    }
-    return node;
-}
-
-astNode* newFilterNode(astNode* joinNode, astNode* operationNode) {
+astNode* newFilterNode(astNode* operationNode) {
     astNode* node = newNode();
     if (node) {
         node->type = FILTER_NODE;
-        node->left = joinNode;
-        node->right = operationNode;
+        node->left = operationNode;
     }
     return node;
 }
@@ -154,7 +135,7 @@ astNode* newQueryNode(nodeType type, astNode* objectNode, astNode* querySetNode)
 
 void addNextElementToSet(astNode* elementSetNode, astNode* nextElementSetNode) {
     if (elementSetNode) {
-    	while (elementSetNode->right) {
+        while (elementSetNode->right) {
             elementSetNode = elementSetNode->right;
         }
         elementSetNode->right = nextElementSetNode;
@@ -163,21 +144,11 @@ void addNextElementToSet(astNode* elementSetNode, astNode* nextElementSetNode) {
 
 void addNextQueryToSet(astNode* querySetNode, astNode* nextQuerySetNode) {
     if (querySetNode) {
-    	while (querySetNode->right) {
+        while (querySetNode->right) {
             querySetNode = querySetNode->right;
         }
         querySetNode->right = nextQuerySetNode;
     }
-}
-
-bool checkJoin(astNode* operationNode) {
-    if (operationNode) {
-        if (operationNode->type >= OP_EQ_NODE && operationNode->type <= OP_LIKE_NODE) {
-            return operationNode->right->type == FOREIGN_KEY_NODE;
-        }
-        return checkJoin(operationNode->left) || checkJoin(operationNode->right);
-    }
-    return false;
 }
 
 void destroyNode(astNode* node) {
@@ -270,22 +241,13 @@ void printNode(astNode* node, int32_t nestingLevel) {
             case KEY_NODE:
                 printf("%s\n", node->strVal);
                 break;
-            case FOREIGN_KEY_NODE:
-                printf("f.");
-                printNode(node->left, nestingLevel);
-                break;
             case FILTER_NODE:
-                printf("\n%*sJoin: ", nestingLevel, "");
-                printNode(node->left, nestingLevel);
-                printf("%*sOperation:\n", nestingLevel, "");
-                printNode(node->right, nestingLevel + 2);
-                break;
-            case JOIN_NODE:
-                printf("%s\n", node->strVal);
+                printf("\n%*sOperation:\n", nestingLevel, "");
+                printNode(node->left, nestingLevel + 2);
                 break;
             case OP_EQ_NODE:
                 printf("%*sOperationType: Equal\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");
@@ -299,7 +261,7 @@ void printNode(astNode* node, int32_t nestingLevel) {
                 break;
             case OP_NEQ_NODE:
                 printf("%*sOperationType: NotEqual\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");
@@ -313,7 +275,7 @@ void printNode(astNode* node, int32_t nestingLevel) {
                 break;
             case OP_GT_NODE:
                 printf("%*sOperationType: Greater\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");
@@ -327,7 +289,7 @@ void printNode(astNode* node, int32_t nestingLevel) {
                 break;
             case OP_GTE_NODE:
                 printf("%*sOperationType: GreaterOrEqual\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");
@@ -341,7 +303,7 @@ void printNode(astNode* node, int32_t nestingLevel) {
                 break;
             case OP_LE_NODE:
                 printf("%*sOperationType: Less\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");
@@ -355,7 +317,7 @@ void printNode(astNode* node, int32_t nestingLevel) {
                 break;
             case OP_LEE_NODE:
                 printf("%*sOperationType: LessOrEqual\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");
@@ -369,7 +331,7 @@ void printNode(astNode* node, int32_t nestingLevel) {
                 break;
             case OP_LIKE_NODE:
                 printf("%*sOperationType: Like\n", nestingLevel, "");
-                if (node->right->type != KEY_NODE && node->right->type != FOREIGN_KEY_NODE) {
+                if (node->right->type != KEY_NODE) {
                     printf("%*sKey: ", nestingLevel, "");
                     printNode(node->left, nestingLevel);
                     printf("%*sValue:\n", nestingLevel, "");

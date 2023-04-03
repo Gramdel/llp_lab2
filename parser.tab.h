@@ -63,17 +63,15 @@ extern int yydebug;
     DELETE = 269,
     VALUES = 270,
     FILTER = 271,
-    JOIN = 272,
-    COMPARE_OP = 273,
-    LIKE_OP = 274,
-    LOGICAL_BOP = 275,
-    LOGICAL_UOP = 276,
-    BOOL = 277,
-    INT = 278,
-    DOUBLE = 279,
-    STRING = 280,
-    NAME = 281,
-    FOREIGN = 282
+    COMPARE_OP = 272,
+    LIKE_OP = 273,
+    LOGICAL_BOP = 274,
+    LOGICAL_UOP = 275,
+    BOOL = 276,
+    INT = 277,
+    DOUBLE = 278,
+    STRING = 279,
+    NAME = 280
   };
 #endif
 
@@ -90,7 +88,7 @@ union YYSTYPE
     astNode* node;
     nodeType opType;
 
-#line 94 "parser.tab.h"
+#line 92 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
